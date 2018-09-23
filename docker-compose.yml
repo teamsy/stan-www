@@ -1,6 +1,7 @@
 version: "3"
 
 services:
+
   react-app:
     build:
       context: .
@@ -8,7 +9,30 @@ services:
     container_name: react-app
     entrypoint: sh entrypoint.sh
     working_dir: /app
-    ports:
-      - 3000:3000
     volumes:
       - .:/app
+  
+  server:
+    build:
+      expose:
+        - ${APP_SERVER_PORT}
+      environnement:
+        API_HOST: ${API_HOST}
+        APP_SERVER_PORT: ${APP_SERVER_PORT}
+      ports:
+        - ${APP_SERVER_PORT}:${APP_SERVER_PORT}
+      volumes:
+        - ./server/src:/server/app/admin-server
+      command: npm run dev
+      
+  client:
+    build:
+      environnement:
+        - REACT_APP_PORT: ${REACT_APP_PORT}
+      ports:
+        - ${REACT_APP_PORT}:${REACT_APP_PORT}
+      volumes:
+        - ./client/src:/client/app/admin-client
+      links:
+        - server
+      command: npm run start
