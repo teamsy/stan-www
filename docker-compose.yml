@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  react-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: react-app
+    entrypoint.sh: sh entrypoint.sh
+    working_dir: /home/node
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/home/node
