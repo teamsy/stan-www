@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+
+  database:
+    image: postgres:latest
+    volumes:
+      - database_data:/var/lib/postgresql/data
+
+  server:
+    build: ./server
+    expose:
+      - 5000
+    ports:
+      - 5000:5000
+    volumes:
+      - ./server/src:/app/server/src
+    command: npm run dev
+      
+  app:
+    volumes:
+      - ./app/src:/usr/app/src
+      - ./app/public:/usr/app/public
+      - ./app/node_modules:/app/node_modules
+    command: npm run start
+    build: ./app
+    ports:
+      - 4000:3000
+    links:
+      - server

@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  test_server:
+    build: ./server
+    environment:
+      CI: "${CI}"
+    command: npm run test
+  #  links:
+  #    - test_database
+  #  environment:
+  #    - PGHOST=database
+  #    - PGDATABASE=postgres
+  #    - PGUSER=postgres
+    
+      
+  test_app:
+    build: ./app
+    environment:
+      CI: "${CI}"
+    command: npm run test
