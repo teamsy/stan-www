@@ -9,13 +9,11 @@ services:
 
   server:
     build: ./server
-    expose:
-      - 5000
     ports:
-      - 5000:5000
+      - "8080:8080"
     volumes:
       - ./server/src:/app/server/src
-    command: npm run dev
+    command: /app/server/node_modules/.bin/nodemon src/index.js
       
   app:
     volumes:
@@ -25,6 +23,6 @@ services:
     command: npm run start
     build: ./app
     ports:
-      - 4000:3000
+      - "3000:3000"
     links:
       - server

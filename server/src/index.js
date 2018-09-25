@@ -1,31 +1,33 @@
-"use strict";
+'use strict';
 
-const express = require("express");
-const pg = require("pg");
-const retry = require("retry");
-
-const operation = retry.operation({ retries: 3 });
-
-operation.attempt(function(attempt) {
-  var client = new pg.Client();
-
-  client.connect(function(e) {
-    client.end();
-    if (operation.retry(e)) {
-      return;
-    }
-    if (!e) console.log("Hello Postgres!");
-  });
-});
+const express = require('express');
+const path = require('path');
 
 // Constants
-const PORT = 5000;
+const PORT = process.env.PORT || 8080;
+const HOST = '0.0.0.0';
+
+const CLIENT_BUILD_PATH = path.join(__dirname, '../../client/build');
 
 // App
 const app = express();
-app.get("/api", function(req, res) {
-  res.send("Hello api!");
+
+// Static files
+app.use(express.static(CLIENT_BUILD_PATH));
+
+// API
+app.get('/api', (req, res) => {
+  res.set('Content-Type', 'application/json');
+  let data = {
+    message: 'Hello world, Woooooeeeee!!!!'
+  };
+  res.send(JSON.stringify(data, null, 2));
 });
 
-app.listen(PORT);
-console.log("Running on http://localhost:" + PORT);
+// All remaining requests return the React app, so it can handle routing.
+app.get('*', function(request, response) {
+  response.sendFile(path.join(CLIENT_BUILD_PATH, 'index.html'));
+});
+
+app.listen(PORT, HOST);
+console.log(`Running on http://${HOST}:${PORT}`);
