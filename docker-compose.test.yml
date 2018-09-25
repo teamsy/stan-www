@@ -6,11 +6,11 @@ services:
     environment:
       CI: "${CI}"
     command: npm run test
-    links:
-      - test_database
-    environment:
-      - PGHOST=database
-      - PGDATABASE=postgres
+  #  links:
+  #    - test_database
+  #  environment:
+  #    - PGHOST=database
+  #    - PGDATABASE=postgres
   #    - PGUSER=postgres
     
       
