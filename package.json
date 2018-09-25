@@ -1,0 +1,19 @@
+{
+  "name": "stan-www",
+  "version": "1.0.0",
+  "description": "running node docker-compose",
+  "main": "server/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/teamsy/stan-www.git"
+  },
+  "author": "teamsy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/teamsy/stan-www/issues"
+  },
+  "homepage": "https://github.com/teamsy/stan-www#readme"
+}
