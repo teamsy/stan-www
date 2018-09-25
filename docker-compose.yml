@@ -1,38 +1,28 @@
-version: "3"
+version: "2"
 
 services:
 
-  react-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: react-app
-    entrypoint: sh entrypoint.sh
-    working_dir: /app
-    volumes:
-      - .:/app
-  
   server:
     build:
-      expose:
-        - ${APP_SERVER_PORT}
-      environnement:
-        API_HOST: ${API_HOST}
-        APP_SERVER_PORT: ${APP_SERVER_PORT}
-      ports:
-        - ${APP_SERVER_PORT}:${APP_SERVER_PORT}
-      volumes:
-        - ./server/src:/server/app/admin-server
-      command: npm run dev
+      context: ./server
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    ports:
+      - "8080:8080"
+    command: /app/node_modules/.bin/nodemon src/index.js
       
   client:
     build:
-      environnement:
-        - REACT_APP_PORT: ${REACT_APP_PORT}
-      ports:
-        - ${REACT_APP_PORT}:${REACT_APP_PORT}
-      volumes:
-        - ./client/src:/client/app/admin-client
-      links:
-        - server
-      command: npm run start
+      context: ./client
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    links:
+      - server
+    ports:
+      - "3000:3000"
+    command: npm start
